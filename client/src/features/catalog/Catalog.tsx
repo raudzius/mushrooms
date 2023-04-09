@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductList from './ProductList';
 
-type CatalogProps = {
-  products: Product[];
-};
+const Catalog: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
 
-const Catalog: React.FC<CatalogProps> = ({ products }) => (
-  <ProductList products={products} />
-);
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then((response) => response.json())
+      .then((productsData) => {
+        setProducts(productsData);
+      });
+  }, []);
+
+  return (
+    <ProductList products={products} />
+  );
+};
 
 export default Catalog;
