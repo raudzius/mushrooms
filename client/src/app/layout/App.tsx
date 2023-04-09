@@ -14,7 +14,7 @@ const App: React.FC = () => {
   };
 
   const theme = createTheme({
-    palette: { mode: palletteType },
+    palette: { mode: palletteType, background: { default: palletteType === 'light' ? '#eaeaea' : '#121212' } },
   });
 
   return (
