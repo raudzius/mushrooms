@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
 import Catalog from '../../features/catalog/Catalog';
 
-const App = () => {
+const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -13,10 +14,10 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Mushroom-Store</h1>
+    <>
+      <Typography variant="h1">Mushroom-Store</Typography>
       <Catalog products={products} />
-    </div>
+    </>
   );
 };
 

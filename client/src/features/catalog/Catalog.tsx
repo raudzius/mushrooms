@@ -1,3 +1,6 @@
+import {
+  Avatar, List, ListItem, ListItemAvatar, ListItemText,
+} from '@mui/material';
 import React from 'react';
 
 type CatalogProps = {
@@ -5,11 +8,16 @@ type CatalogProps = {
 };
 
 const Catalog: React.FC<CatalogProps> = ({ products }) => (
-  <ul>
-    {products.map(({ id, name, price }) => (
-      <li key={id}>{`${name}-${price}`}</li>
+  <List>
+    {products.map(({
+      id, name, price, pictureUrl,
+    }) => (
+      <ListItem key={id}>
+        <ListItemAvatar><Avatar src={pictureUrl} /></ListItemAvatar>
+        <ListItemText>{`${name} - ${price}`}</ListItemText>
+      </ListItem>
     ))}
-  </ul>
+  </List>
 );
 
 export default Catalog;
