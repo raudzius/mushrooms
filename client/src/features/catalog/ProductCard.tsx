@@ -1,6 +1,7 @@
 import {
-  Avatar, ListItem, ListItemAvatar, ListItemText, Typography,
+  Button, Card, CardHeader, Avatar, CardActions, CardContent, CardMedia, Typography,
 } from '@mui/material';
+import { Restaurant, LocalPharmacy } from '@mui/icons-material';
 import React from 'react';
 
 type ProductCardProps = {
@@ -11,14 +12,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
 }) => {
   const {
-    id, pictureUrl, name, price,
+    pictureUrl, name, price, category,
   } = product;
 
+  const cardHeaderIcon = category === 'Edible' ? <Restaurant /> : <LocalPharmacy />;
+
   return (
-    <ListItem key={id}>
-      <ListItemAvatar><Avatar src={pictureUrl} /></ListItemAvatar>
-      <ListItemText>{`${name} - ${price}`}</ListItemText>
-    </ListItem>
+    <Card>
+      <CardHeader avatar={<Avatar sx={{ bgcolor: 'secondary.main' }}>{cardHeaderIcon}</Avatar>} title={name} titleTypographyProps={{ sx: { fontWeight: 'bold', color: 'primary.main' } }} />
+      <CardMedia
+        sx={{ height: 140, backgroundSize: 'contain' }}
+        image={pictureUrl}
+        title={name}
+      />
+      <CardContent>
+        <Typography gutterBottom color="secondary" variant="h5">{`€${(price / 100).toFixed(2)}`}</Typography>
+        <Typography variant="body2" color="text.secondary">{product.type}</Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Add to cart</Button>
+        <Button size="small">View</Button>
+      </CardActions>
+    </Card>
   );
 };
 
