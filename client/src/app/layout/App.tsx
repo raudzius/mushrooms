@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Catalog from '../../features/catalog/Catalog';
 
 const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,11 +15,7 @@ const App = () => {
   return (
     <div>
       <h1>Mushroom-Store</h1>
-      <ul>
-        {products.map(({ id, name, price }) => (
-          <li key={id}>{`${name}-${price}`}</li>
-        ))}
-      </ul>
+      <Catalog products={products} />
     </div>
   );
 };
