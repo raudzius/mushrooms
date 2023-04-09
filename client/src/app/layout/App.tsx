@@ -18,7 +18,9 @@ const App: React.FC = () => {
     <>
       <CssBaseline />
       <Header />
-      <Catalog products={products} />
+      <Container>
+        <Catalog products={products} />
+      </Container>
     </>
   );
 };
