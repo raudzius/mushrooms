@@ -3,6 +3,7 @@ import {
 } from '@mui/material';
 import { Restaurant, LocalPharmacy } from '@mui/icons-material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 type ProductCardProps = {
   product: Product;
@@ -31,7 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </CardContent>
       <CardActions>
         <Button size="small">Add to cart</Button>
-        <Button size="small">View</Button>
+        <Button component={RouterLink} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
   );
