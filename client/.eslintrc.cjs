@@ -24,5 +24,6 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
+    '@typescript-eslint/no-throw-literal': [0],
   },
 };
