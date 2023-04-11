@@ -5,6 +5,7 @@ import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import agent from '../../app/api/agent';
+import NotFound from '../../app/errors/NotFound';
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string; }>();
@@ -25,7 +26,7 @@ const ProductDetails: React.FC = () => {
   }
 
   if (!product) {
-    return <Typography variant="h3">Product not found</Typography>;
+    return <NotFound />;
   }
 
   return (
