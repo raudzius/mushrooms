@@ -15,7 +15,7 @@ const ProductDetails: React.FC = () => {
     if (id) {
       agent.Catalog.details(parseInt(id, 10))
         .then((responseData) => setProduct(responseData))
-        .catch((error) => console.log(error.response))
+        .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }
   }, [id]);
