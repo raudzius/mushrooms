@@ -25,5 +25,6 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-throw-literal': [0],
+    'import/no-cycle': [0],
   },
 };
