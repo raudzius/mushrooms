@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ProductList from './ProductList';
+import agent from '../../app/api/agent';
 
 const Catalog: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
-      .then((response) => response.json())
-      .then((productsData) => {
-        setProducts(productsData);
-      });
+    agent.Catalog.list().then((productsData) => setProducts(productsData));
   }, []);
 
   return (
