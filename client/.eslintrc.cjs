@@ -26,5 +26,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-throw-literal': [0],
     'import/no-cycle': [0],
+    'no-promise-executor-return': [0],
+    'react/require-default-props': [0],
   },
 };

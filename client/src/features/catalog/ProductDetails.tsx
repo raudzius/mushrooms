@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import agent from '../../app/api/agent';
 import NotFound from '../../app/errors/NotFound';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string; }>();
@@ -21,9 +22,7 @@ const ProductDetails: React.FC = () => {
     }
   }, [id]);
 
-  if (loading) {
-    return <Typography variant="h3">Loading...</Typography>;
-  }
+  if (loading) return <LoadingComponent message="Loading product..." />;
 
   if (!product) {
     return <NotFound />;
