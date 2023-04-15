@@ -32,13 +32,8 @@ namespace API.Controllers
             .FirstOrDefaultAsync(basket => basket.BuyerId == Request.Cookies["buyerId"]);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<BasketDto>> GetBasket()
+    private BasketDto MapBasketToDto(Basket basket)
     {
-      var basket = await RetrieveBasket();
-
-      if (basket == null) return NotFound();
-
       return new BasketDto
       {
         Id = basket.Id,
@@ -56,8 +51,17 @@ namespace API.Controllers
       };
     }
 
+    [HttpGet(Name = "GetBasket")]
+    public async Task<ActionResult<BasketDto>> GetBasket()
+    {
+      var basket = await RetrieveBasket();
+
+      if (basket == null) return NotFound();
+      return MapBasketToDto(basket);
+    }
+
     [HttpPost]
-    public async Task<ActionResult> AddItemToBasket(int productId, int quantity)
+    public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
     {
       var basket = await RetrieveBasket();
       if (basket == null) basket = CreateBasket();
@@ -67,7 +71,7 @@ namespace API.Controllers
       basket!.AddItem(product, quantity);
 
       var result = await _context.SaveChangesAsync() > 0;
-      if (result) return StatusCode(201);
+      if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket));
 
       return BadRequest(new ProblemDetails { Title = "Problem saving item to basket" });
     }
@@ -81,7 +85,7 @@ namespace API.Controllers
 
       var result = await _context.SaveChangesAsync() > 0;
       if (result) return Ok();
-      
+
       return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket" });
     }
   }
