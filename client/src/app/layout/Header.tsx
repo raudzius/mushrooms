@@ -3,7 +3,7 @@ import {
   AppBar, Toolbar, Typography, Switch, List, ListItem, Badge, IconButton, Box,
 } from '@mui/material';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link as RouterLink, NavLink } from 'react-router-dom';
 
 const navStyles = {
   color: 'inherit',
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => (
       </List>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton size="large" edge="end" color="inherit" sx={{ mr: 2 }}>
+        <IconButton component={RouterLink} to="/basket" size="large" edge="end" color="inherit" sx={{ mr: 2 }}>
           <Badge badgeContent="4" color="secondary">
             <ShoppingCart />
           </Badge>
