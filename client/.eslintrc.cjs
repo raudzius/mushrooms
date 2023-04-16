@@ -28,5 +28,6 @@ module.exports = {
     'import/no-cycle': [0],
     'no-promise-executor-return': [0],
     'react/require-default-props': [0],
+    'react/jsx-no-constructed-context-values': [0],
   },
 };
