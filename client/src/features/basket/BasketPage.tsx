@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  IconButton,
+  Box,
   Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography,
 } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { Add, Delete, Remove } from '@mui/icons-material';
+import Image from 'mui-image';
+import { LoadingButton } from '@mui/lab';
 import { useStoreContext } from '../../app/context/StoreContext';
+import agent from '../../app/api/agent';
 
 const BasketPage: React.FC = () => {
-  const { basket } = useStoreContext();
+  const { basket, setBasket, removeItem } = useStoreContext();
+  const [status, setStatus] = useState({ loading: false, name: '' });
+
+  const handleAddItem = (productId: number, name: string) => {
+    setStatus({ loading: true, name });
+    agent.Basket.addItem(productId)
+      .then((basketData) => setBasket(basketData))
+      .catch((error) => console.log(error))
+      .finally(() => setStatus({ loading: false, name: '' }));
+  };
+
+  const handleRemoveItem = (productId: number, name: string, quantity = 1) => {
+    setStatus({ loading: true, name });
+    agent.Basket.removeItem(productId, quantity)
+      .then(() => removeItem(productId, quantity))
+      .catch((error) => console.log(error))
+      .finally(() => setStatus({ loading: false, name: '' }));
+  };
 
   if (!basket) return <Typography variant="h3">Your basket is empty</Typography>;
 
@@ -18,7 +38,7 @@ const BasketPage: React.FC = () => {
           <TableRow>
             <TableCell>Product</TableCell>
             <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="center">Quantity</TableCell>
             <TableCell align="right">Subtotal</TableCell>
           </TableRow>
         </TableHead>
@@ -29,13 +49,46 @@ const BasketPage: React.FC = () => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {basketItem.name}
+                <Box display="flex" alignItems="center">
+                  <Image
+                    src={basketItem.pictureUrl}
+                    alt={basketItem.name}
+                    duration={0}
+                    height={50}
+                    width={70}
+                    style={{ marginRight: 90 }}
+                  />
+                  <Typography component="span">{basketItem.name}</Typography>
+                </Box>
               </TableCell>
               <TableCell align="right">{`€${(basketItem.price / 100).toFixed(2)}`}</TableCell>
-              <TableCell align="right">{basketItem.quantity}</TableCell>
+              <TableCell align="center">
+                <LoadingButton
+                  color="success"
+                  loading={status.loading && status.name === `add${basketItem.productId}`}
+                  onClick={() => handleAddItem(basketItem.productId, `add${basketItem.productId}`)}
+                >
+                  <Add />
+                </LoadingButton>
+                {basketItem.quantity}
+                <LoadingButton
+                  color="error"
+                  loading={status.loading && status.name === `remove${basketItem.productId}`}
+                  onClick={() => handleRemoveItem(basketItem.productId, `remove${basketItem.productId}`)}
+                >
+                  <Remove />
+                </LoadingButton>
+              </TableCell>
               <TableCell align="right">
                 {`€${((basketItem.price / 100) * basketItem.quantity).toFixed(2)}`}
-                <IconButton color="error"><Delete /></IconButton>
+                <LoadingButton
+                  color="error"
+                  loading={status.loading && status.name === `delete${basketItem.productId}`}
+                  onClick={() => handleRemoveItem(basketItem.productId, `delete${basketItem.productId}`, basketItem.quantity)}
+                >
+                  <Delete />
+
+                </LoadingButton>
               </TableCell>
             </TableRow>
           ))}
