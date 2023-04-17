@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import agent from '../../app/api/agent';
+import { useStoreContext } from '../../app/context/StoreContext';
 
 type ProductCardProps = {
   product: Product;
@@ -15,6 +16,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
 }) => {
   const [loading, setLoading] = useState(false);
+  const { setBasket } = useStoreContext();
   const {
     pictureUrl, name, price, category,
   } = product;
@@ -23,6 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setLoading(true);
 
     agent.Basket.addItem(productId)
+      .then((basketData) => setBasket(basketData))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   };

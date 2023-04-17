@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink, NavLink } from 'react-router-dom';
+import { useStoreContext } from '../context/StoreContext';
 
 const navStyles = {
   color: 'inherit',
@@ -28,44 +29,29 @@ type HeaderProps = {
   toggleDarkMode: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => (
-  <AppBar position="static" sx={{ mb: 4 }}>
-    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => {
+  const { basket } = useStoreContext();
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography
-          variant="h6"
-          component={NavLink}
-          to="/"
-          sx={navStyles}
-        >
-          Mushrooms
+  return (
+    <AppBar position="static" sx={{ mb: 4 }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-        </Typography>
-        <Switch checked={darkMode} onChange={toggleDarkMode} />
-      </Box>
-
-      <List sx={{ display: 'flex' }}>
-        {midLinks.map(({ title, path }) => (
-          <ListItem
-            key={title}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography
+            variant="h6"
             component={NavLink}
-            to={path}
+            to="/"
             sx={navStyles}
           >
-            {title.toUpperCase()}
-          </ListItem>
-        ))}
-      </List>
+            Mushrooms
 
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton component={RouterLink} to="/basket" size="large" edge="end" color="inherit" sx={{ mr: 2 }}>
-          <Badge badgeContent="4" color="secondary">
-            <ShoppingCart />
-          </Badge>
-        </IconButton>
+          </Typography>
+          <Switch checked={darkMode} onChange={toggleDarkMode} />
+        </Box>
+
         <List sx={{ display: 'flex' }}>
-          {rightLinks.map(({ title, path }) => (
+          {midLinks.map(({ title, path }) => (
             <ListItem
               key={title}
               component={NavLink}
@@ -76,10 +62,30 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => (
             </ListItem>
           ))}
         </List>
-      </Box>
 
-    </Toolbar>
-  </AppBar>
-);
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton component={RouterLink} to="/basket" size="large" edge="end" color="inherit" sx={{ mr: 2 }}>
+            <Badge badgeContent={itemCount} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+          <List sx={{ display: 'flex' }}>
+            {rightLinks.map(({ title, path }) => (
+              <ListItem
+                key={title}
+                component={NavLink}
+                to={path}
+                sx={navStyles}
+              >
+                {title.toUpperCase()}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default Header;

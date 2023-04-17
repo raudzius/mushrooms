@@ -33,6 +33,8 @@ const App: React.FC = () => {
         .then((basketData) => setBasket(basketData))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, [setBasket]);
 
