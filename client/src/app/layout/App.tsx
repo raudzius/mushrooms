@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useStoreContext } from '../context/StoreContext';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
-import getCookie from '../util/util';
+import { getCookie } from '../util/util';
 
 const App: React.FC = () => {
   const { setBasket } = useStoreContext();

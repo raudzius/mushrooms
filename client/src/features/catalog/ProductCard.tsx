@@ -7,6 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import agent from '../../app/api/agent';
 import { useStoreContext } from '../../app/context/StoreContext';
+import { currencyFormat } from '../../app/util/util';
 
 type ProductCardProps = {
   product: Product;
@@ -41,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         title={name}
       />
       <CardContent>
-        <Typography gutterBottom color="secondary" variant="h5">{`€${(price / 100).toFixed(2)}`}</Typography>
+        <Typography gutterBottom color="secondary" variant="h5">{currencyFormat(price)}</Typography>
         <Typography variant="body2" color="text.secondary">{product.type}</Typography>
       </CardContent>
       <CardActions>
