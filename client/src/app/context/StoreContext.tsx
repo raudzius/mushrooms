@@ -29,18 +29,15 @@ export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
   const removeItem = (productId: number, quantity: number) => {
     if (!basket) return;
 
-    const basketItems = [...basket.items];
-    const basketItemIndex = basketItems
-      .findIndex((basketItem) => basketItem.productId === productId);
+    const items = [...basket.items];
+    const itemIndex = items.findIndex((item) => item.productId === productId);
 
-    if (basketItemIndex >= 0) {
-      const foundBasketItem = basketItems[basketItemIndex];
-      foundBasketItem.quantity -= quantity;
+    if (itemIndex >= 0) {
+      items[itemIndex].quantity -= quantity;
 
-      if (foundBasketItem.quantity === 0) {
-        basketItems.splice(basketItemIndex, 1);
-        setBasket((prevState) => ({ ...prevState!, items: basketItems }));
-      }
+      if (items[itemIndex].quantity === 0) items.splice(itemIndex, 1);
+
+      setBasket((prevState) => ({ ...prevState!, items }));
     }
   };
 
