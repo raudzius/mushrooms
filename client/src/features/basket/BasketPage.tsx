@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
   Box,
+  Button,
   Grid,
   Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography,
 } from '@mui/material';
 import { Add, Delete, Remove } from '@mui/icons-material';
 import Image from 'mui-image';
 import { LoadingButton } from '@mui/lab';
+import { Link as RouterLink } from 'react-router-dom';
 import { useStoreContext } from '../../app/context/StoreContext';
 import agent from '../../app/api/agent';
 import BasketSummary from './BasketSummary';
@@ -100,7 +102,18 @@ const BasketPage: React.FC = () => {
       </TableContainer>
       <Grid container>
         <Grid item xs={6} />
-        <Grid item xs={6}><BasketSummary /></Grid>
+        <Grid item xs={6}>
+          <BasketSummary />
+          <Button
+            component={RouterLink}
+            to="/checkout"
+            variant="contained"
+            size="large"
+            fullWidth
+          >
+            Checkout
+          </Button>
+        </Grid>
       </Grid>
     </>
   );
