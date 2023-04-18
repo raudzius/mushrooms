@@ -29,5 +29,6 @@ module.exports = {
     'no-promise-executor-return': [0],
     'react/require-default-props': [0],
     'react/jsx-no-constructed-context-values': [0],
+    'no-param-reassign': [0],
   },
 };
