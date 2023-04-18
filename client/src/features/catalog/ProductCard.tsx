@@ -6,8 +6,9 @@ import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import agent from '../../app/api/agent';
-import { useStoreContext } from '../../app/context/StoreContext';
 import { currencyFormat } from '../../app/util/util';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { setBasket } from '../basket/basketSlice';
 
 type ProductCardProps = {
   product: Product;
@@ -17,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
   const {
     pictureUrl, name, price, category,
   } = product;
@@ -26,7 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setLoading(true);
 
     agent.Basket.addItem(productId)
-      .then((basketData) => setBasket(basketData))
+      .then((basketData) => dispatch(setBasket(basketData)))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   };

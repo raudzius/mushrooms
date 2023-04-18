@@ -8,10 +8,12 @@ import { LoadingButton } from '@mui/lab';
 import agent from '../../app/api/agent';
 import NotFound from '../../app/errors/NotFound';
 import LoadingComponent from '../../app/layout/LoadingComponent';
-import { useStoreContext } from '../../app/context/StoreContext';
+import { useAppSelector, useAppDispatch } from '../../app/store/configureStore';
+import { setBasket, removeItem } from '../basket/basketSlice';
 
 const ProductDetails: React.FC = () => {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
+  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string; }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,13 +42,13 @@ const ProductDetails: React.FC = () => {
     if (!basketItem || quantity > basketItem.quantity) {
       const updatedQuantity = basketItem ? quantity - basketItem.quantity : quantity;
       agent.Basket.addItem(product!.id, updatedQuantity)
-        .then((basketData) => setBasket(basketData))
+        .then((basketData) => dispatch(setBasket(basketData)))
         .catch((error) => console.log(error))
         .finally(() => setSubmitting(false));
     } else {
       const updatedQuantity = basketItem.quantity - quantity;
       agent.Basket.removeItem(product!.id, updatedQuantity)
-        .then(() => removeItem(product!.id, updatedQuantity))
+        .then(() => dispatch(removeItem({ productId: product!.id, quantity: updatedQuantity })))
         .catch((error) => console.log(error))
         .finally(() => setSubmitting(false));
     }

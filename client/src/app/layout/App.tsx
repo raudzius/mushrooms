@@ -6,13 +6,14 @@ import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStoreContext } from '../context/StoreContext';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
 import { getCookie } from '../util/util';
+import { useAppDispatch } from '../store/configureStore';
+import { setBasket } from '../../features/basket/basketSlice';
 
 const App: React.FC = () => {
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const palletteType = darkMode ? 'dark' : 'light';
@@ -30,13 +31,13 @@ const App: React.FC = () => {
 
     if (buyerId) {
       agent.Basket.get()
-        .then((basketData) => setBasket(basketData))
+        .then((basketData) => dispatch(setBasket(basketData)))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [setBasket]);
+  }, [dispatch]);
 
   if (loading) return <LoadingComponent message="Initializing app..." />;
 

@@ -9,18 +9,20 @@ import { Add, Delete, Remove } from '@mui/icons-material';
 import Image from 'mui-image';
 import { LoadingButton } from '@mui/lab';
 import { Link as RouterLink } from 'react-router-dom';
-import { useStoreContext } from '../../app/context/StoreContext';
 import agent from '../../app/api/agent';
 import BasketSummary from './BasketSummary';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { removeItem, setBasket } from './basketSlice';
 
 const BasketPage: React.FC = () => {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
+  const dispatch = useAppDispatch();
   const [status, setStatus] = useState({ loading: false, name: '' });
 
   const handleAddItem = (productId: number, name: string) => {
     setStatus({ loading: true, name });
     agent.Basket.addItem(productId)
-      .then((basketData) => setBasket(basketData))
+      .then((basketData) => dispatch(setBasket(basketData)))
       .catch((error) => console.log(error))
       .finally(() => setStatus({ loading: false, name: '' }));
   };
@@ -28,7 +30,7 @@ const BasketPage: React.FC = () => {
   const handleRemoveItem = (productId: number, name: string, quantity = 1) => {
     setStatus({ loading: true, name });
     agent.Basket.removeItem(productId, quantity)
-      .then(() => removeItem(productId, quantity))
+      .then(() => dispatch(removeItem({ productId, quantity })))
       .catch((error) => console.log(error))
       .finally(() => setStatus({ loading: false, name: '' }));
   };
