@@ -17,5 +17,13 @@ namespace API.Extensions
 
       return query;
     }
+
+    public static IQueryable<Product> Search(this IQueryable<Product> query, string? searchTerm)
+    {
+      if (string.IsNullOrWhiteSpace(searchTerm)) return query;
+
+      var lowerCaseSearchTerm = searchTerm.Trim().ToLower();
+      return query.Where(product => product.Name!.ToLower().Contains(lowerCaseSearchTerm));
+    }
   }
 }
