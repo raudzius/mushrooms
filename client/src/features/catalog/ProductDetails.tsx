@@ -98,7 +98,7 @@ const ProductDetails: React.FC = () => {
               size="large"
               variant="contained"
               fullWidth
-              loading={status.includes('pendingRemoveItem' || 'pendingAddItem')}
+              loading={status.includes('pending')}
               disabled={basketItem?.quantity === quantity || (!basketItem && quantity === 0)}
               onClick={handleUpdateCart}
             >
