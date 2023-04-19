@@ -9,16 +9,15 @@ import agent from '../../app/api/agent';
 import NotFound from '../../app/errors/NotFound';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 import { useAppSelector, useAppDispatch } from '../../app/store/configureStore';
-import { setBasket, removeItem } from '../basket/basketSlice';
+import { addBasketItemAsync, removeBasketItemAsync } from '../basket/basketSlice';
 
 const ProductDetails: React.FC = () => {
-  const { basket } = useAppSelector((state) => state.basket);
+  const { basket, status } = useAppSelector((state) => state.basket);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string; }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
   const basketItem = basket?.items.find((item) => item.productId === product?.id);
 
   useEffect(() => {
@@ -38,19 +37,12 @@ const ProductDetails: React.FC = () => {
   };
 
   const handleUpdateCart = () => {
-    setSubmitting(true);
     if (!basketItem || quantity > basketItem.quantity) {
       const updatedQuantity = basketItem ? quantity - basketItem.quantity : quantity;
-      agent.Basket.addItem(product!.id, updatedQuantity)
-        .then((basketData) => dispatch(setBasket(basketData)))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      dispatch(addBasketItemAsync({ productId: product!.id, quantity: updatedQuantity }));
     } else {
       const updatedQuantity = basketItem.quantity - quantity;
-      agent.Basket.removeItem(product!.id, updatedQuantity)
-        .then(() => dispatch(removeItem({ productId: product!.id, quantity: updatedQuantity })))
-        .catch((error) => console.log(error))
-        .finally(() => setSubmitting(false));
+      dispatch(removeBasketItemAsync({ productId: product!.id, quantity: updatedQuantity }));
     }
   };
 
@@ -111,7 +103,7 @@ const ProductDetails: React.FC = () => {
               size="large"
               variant="contained"
               fullWidth
-              loading={submitting}
+              loading={status.includes('pendingRemoveItem' || 'pendingAddItem')}
               disabled={basketItem?.quantity === quantity || (!basketItem && quantity === 0)}
               onClick={handleUpdateCart}
             >

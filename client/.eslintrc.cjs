@@ -30,5 +30,6 @@ module.exports = {
     'react/require-default-props': [0],
     'react/jsx-no-constructed-context-values': [0],
     'no-param-reassign': [0],
+    'consistent-return': [0],
   },
 };

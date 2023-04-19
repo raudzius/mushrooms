@@ -2,13 +2,12 @@ import {
   Button, Card, CardHeader, Avatar, CardActions, CardContent, CardMedia, Typography,
 } from '@mui/material';
 import { Restaurant, LocalPharmacy } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
-import agent from '../../app/api/agent';
 import { currencyFormat } from '../../app/util/util';
-import { useAppDispatch } from '../../app/store/configureStore';
-import { setBasket } from '../basket/basketSlice';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { addBasketItemAsync } from '../basket/basketSlice';
 
 type ProductCardProps = {
   product: Product;
@@ -17,20 +16,11 @@ type ProductCardProps = {
 const ProductCard: React.FC<ProductCardProps> = ({
   product,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { status } = useAppSelector((state) => state.basket);
   const dispatch = useAppDispatch();
   const {
     pictureUrl, name, price, category,
   } = product;
-
-  const handleAddItem = (productId: number) => {
-    setLoading(true);
-
-    agent.Basket.addItem(productId)
-      .then((basketData) => dispatch(setBasket(basketData)))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  };
 
   const cardHeaderIcon = category === 'Edible' ? <Restaurant /> : <LocalPharmacy />;
 
@@ -47,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Typography variant="body2" color="text.secondary">{product.type}</Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={loading} size="small" onClick={() => handleAddItem(product.id)}>Add to cart</LoadingButton>
+        <LoadingButton loading={status.includes(`pendingAddItem${product.id}`)} size="small" onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))}>Add to cart</LoadingButton>
         <Button component={RouterLink} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
