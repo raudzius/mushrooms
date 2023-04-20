@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Box, Checkbox, FormControlLabel, FormGroup, Grid, Pagination, Paper,
+  Box, Grid, Pagination, Paper,
   Typography,
 } from '@mui/material';
 import ProductList from './ProductList';
@@ -11,6 +11,7 @@ import {
 } from './catalogSlice';
 import ProductSearch from './ProductSearch';
 import RadioButtonGroup from '../../app/components/RadioButtonGroup';
+import CheckboxButtons from '../../app/components/CheckboxButtons';
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -49,18 +50,18 @@ const Catalog: React.FC = () => {
           />
         </Paper>
         <Paper sx={{ mb: 2, p: 2 }}>
-          <FormGroup>
-            {types.map((type) => (
-              <FormControlLabel key={type} control={<Checkbox />} label={type} />
-            ))}
-          </FormGroup>
+          <CheckboxButtons
+            items={types}
+            checked={productParams.types}
+            onChange={(items: string[]) => dispatch(setProductParams({ types: items }))}
+          />
         </Paper>
         <Paper sx={{ mb: 2, p: 2 }}>
-          <FormGroup>
-            {categories.map((category) => (
-              <FormControlLabel key={category} control={<Checkbox />} label={category} />
-            ))}
-          </FormGroup>
+          <CheckboxButtons
+            items={categories}
+            checked={productParams.categories}
+            onChange={(items: string[]) => dispatch(setProductParams({ categories: items }))}
+          />
         </Paper>
       </Grid>
       <Grid item xs={9}>
