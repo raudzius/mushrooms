@@ -8,3 +8,12 @@ type Product = {
   category: string;
   quantityInStock: number;
 };
+
+type ProductParams = {
+  orderBy: string;
+  searchTerm?: string;
+  categories?: string[];
+  types?: string[];
+  pageNumber: number;
+  pageSize: number;
+};
