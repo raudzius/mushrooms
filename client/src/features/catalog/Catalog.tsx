@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import {
   Box, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Pagination, Paper, Radio,
-  RadioGroup, TextField, Typography,
+  RadioGroup, Typography,
 } from '@mui/material';
 import ProductList from './ProductList';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import { fetchFiltersAsync, fetchProductsAsync, productSelectors } from './catalogSlice';
+import ProductSearch from './ProductSearch';
 
 const sortOptions = [
   { value: 'name', label: 'Alphabetical' },
@@ -35,7 +36,7 @@ const Catalog: React.FC = () => {
     <Grid container spacing={4}>
       <Grid item xs={3}>
         <Paper sx={{ mb: 2 }}>
-          <TextField label="Search products" variant="outlined" fullWidth />
+          <ProductSearch />
         </Paper>
         <Paper sx={{ mb: 2, p: 2 }}>
           <FormControl>
