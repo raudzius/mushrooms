@@ -4,7 +4,7 @@ type Product = {
   description: string;
   price: number;
   pictureUrl: string;
-  type: string;
+  type?: string;
   category: string;
   quantityInStock: number;
 };
@@ -12,8 +12,8 @@ type Product = {
 type ProductParams = {
   orderBy: string;
   searchTerm?: string;
-  categories?: string[];
-  types?: string[];
+  categories: string[];
+  types: string[];
   pageNumber: number;
   pageSize: number;
 };
