@@ -4,15 +4,15 @@ import {
   Avatar, Box, Button, Container, Grid, Link, Paper, TextField, Typography,
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
+import { FieldValues, useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
+import agent from '../../app/api/agent';
 
 const Login: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const { register, handleSubmit, formState: { isSubmitting } } = useForm();
+
+  const submitForm = async (data: FieldValues) => {
+    await agent.Account.login(data);
   };
 
   return (
@@ -29,35 +29,30 @@ const Login: React.FC = () => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={() => handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
-          required
           fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
+          label="Username"
           autoFocus
+          {...register('username')}
         />
         <TextField
           margin="normal"
-          required
           fullWidth
-          name="password"
           label="Password"
           type="password"
-          id="password"
-          autoComplete="current-password"
+          {...register('password')}
         />
-        <Button
+        <LoadingButton
+          loading={isSubmitting}
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
           Sign In
-        </Button>
+        </LoadingButton>
         <Grid container>
           <Grid item>
             <Link component={RouterLink} to="register">
