@@ -1,24 +1,24 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Avatar, Box, Container, Grid, Link, Paper, TextField, Typography,
 } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import agent from '../../app/api/agent';
+import { useAppDispatch } from '../../app/store/configureStore';
+import { signInUser } from './accountSlice';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
     mode: 'onTouched',
   });
 
   const submitForm = async (data: FieldValues) => {
-    try {
-      await agent.Account.login(data);
-    } catch (error) {
-      console.log(error);
-    }
+    await dispatch(signInUser(data));
+    navigate('/catalog');
   };
 
   return (
