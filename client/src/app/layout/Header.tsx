@@ -5,6 +5,7 @@ import {
 import React from 'react';
 import { Link as RouterLink, NavLink } from 'react-router-dom';
 import { useAppSelector } from '../store/configureStore';
+import SignedInMenu from './SignedInMenu';
 
 const navStyles = {
   color: 'inherit',
@@ -31,6 +32,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => {
   const { basket } = useAppSelector((state) => state.basket);
+  const { user } = useAppSelector((state) => state.account);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
@@ -69,18 +71,20 @@ const Header: React.FC<HeaderProps> = ({ darkMode, toggleDarkMode }) => {
               <ShoppingCart />
             </Badge>
           </IconButton>
-          <List sx={{ display: 'flex' }}>
-            {rightLinks.map(({ title, path }) => (
-              <ListItem
-                key={title}
-                component={NavLink}
-                to={path}
-                sx={navStyles}
-              >
-                {title.toUpperCase()}
-              </ListItem>
-            ))}
-          </List>
+          {user ? <SignedInMenu /> : (
+            <List sx={{ display: 'flex' }}>
+              {rightLinks.map(({ title, path }) => (
+                <ListItem
+                  key={title}
+                  component={NavLink}
+                  to={path}
+                  sx={navStyles}
+                >
+                  {title.toUpperCase()}
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Box>
 
       </Toolbar>
