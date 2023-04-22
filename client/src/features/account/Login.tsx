@@ -66,7 +66,7 @@ const Login: React.FC = () => {
         </LoadingButton>
         <Grid container>
           <Grid item>
-            <Link component={RouterLink} to="register">
+            <Link component={RouterLink} to="/register">
               Don&apos;t have an account? Sign Up
             </Link>
           </Grid>
