@@ -33,5 +33,6 @@ module.exports = {
     'consistent-return': [0],
     'react/jsx-props-no-spreading': [0],
     '@typescript-eslint/no-use-before-define': [0],
+    '@typescript-eslint/no-shadow': [0],
   },
 };

@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LockOutlined } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
-  Container, Paper, Avatar, Typography, Box, TextField, Grid, Link, Alert, AlertTitle, List, ListItem, ListItemText,
+  Container, Paper, Avatar, Typography, Box, TextField, Grid, Link
+  ,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import agent from '../../app/api/agent';
 
 const Register: React.FC = () => {
-  const [validationErrors, setValidationErrors] = useState([]);
-  const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
+  const navigate = useNavigate();
+  const {
+    register, handleSubmit, setError, formState: { isSubmitting, errors, isValid },
+  } = useForm({
     mode: 'onTouched',
   });
+
+  const handleApiErrors = (errors: any) => {
+    if (errors) {
+      errors.forEach((error: string) => {
+        if (error.includes('Password')) {
+          setError('password', { message: error });
+        } else if (error.includes('Email')) {
+          setError('email', { message: error });
+        } else if (error.includes('Username')) {
+          setError('username', { message: error });
+        }
+      });
+    }
+  };
 
   return (
     <Container
@@ -31,7 +49,11 @@ const Register: React.FC = () => {
       <Box
         component="form"
         onSubmit={handleSubmit((data) => agent.Account.register(data)
-          .catch((error) => setValidationErrors(error)))}
+          .then(() => {
+            toast.success('Registration successful - you can now login');
+            navigate('/login');
+          })
+          .catch((error) => handleApiErrors(error)))}
         noValidate
         sx={{ mt: 1 }}
       >
@@ -50,7 +72,13 @@ const Register: React.FC = () => {
           label="Email"
           error={!!errors.email}
           helperText={errors?.email?.message as string}
-          {...register('email', { required: 'Email is required' })}
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^\w+[\w-.]*@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/,
+              message: 'Not a valid email address',
+            },
+          })}
         />
         <TextField
           margin="normal"
@@ -59,20 +87,14 @@ const Register: React.FC = () => {
           type="password"
           error={!!errors.password}
           helperText={errors?.password?.message as string}
-          {...register('password', { required: 'Password is required' })}
+          {...register('password', {
+            required: 'Password is required',
+            pattern: {
+              value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
+              message: 'Password does not meet complexity requirements',
+            },
+          })}
         />
-        {validationErrors.length > 0 && (
-          <Alert severity="error">
-            <AlertTitle>Validation Errors</AlertTitle>
-            <List>
-              {validationErrors.map((validationError) => (
-                <ListItem key={validationError}>
-                  <ListItemText>{validationError}</ListItemText>
-                </ListItem>
-              ))}
-            </List>
-          </Alert>
-        )}
         <LoadingButton
           type="submit"
           fullWidth
