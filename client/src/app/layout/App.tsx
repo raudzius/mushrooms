@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container, CssBaseline, createTheme, ThemeProvider,
 } from '@mui/material';
@@ -6,11 +6,9 @@ import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 import 'react-toastify/dist/ReactToastify.css';
-import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
-import { getCookie } from '../util/util';
 import { useAppDispatch } from '../store/configureStore';
-import { setBasket } from '../../features/basket/basketSlice';
+import { fetchBasketAsync } from '../../features/basket/basketSlice';
 import { fetchCurrentUser } from '../../features/account/accountSlice';
 
 const App: React.FC = () => {
@@ -18,6 +16,15 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const palletteType = darkMode ? 'dark' : 'light';
+
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
 
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => !prevMode);
@@ -28,17 +35,8 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    const buyerId = getCookie('buyerId');
-    dispatch(fetchCurrentUser());
-    if (buyerId) {
-      agent.Basket.get()
-        .then((basketData) => dispatch(setBasket(basketData)))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, [dispatch]);
+    initApp().then(() => setLoading(false));
+  }, [initApp]);
 
   if (loading) return <LoadingComponent message="Initializing app..." />;
 
