@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Avatar, Box, Container, Grid, Link, Paper, TextField, Typography,
 } from '@mui/material';
@@ -11,6 +11,7 @@ import { signInUser } from './accountSlice';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
     mode: 'onTouched',
@@ -19,7 +20,7 @@ const Login: React.FC = () => {
   const submitForm = async (data: FieldValues) => {
     try {
       await dispatch(signInUser(data));
-      navigate('/catalog');
+      navigate(location.state?.from || '/catalog');
     } catch (error) {
       console.log(error);
     }
