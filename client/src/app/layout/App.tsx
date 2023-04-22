@@ -11,6 +11,7 @@ import LoadingComponent from './LoadingComponent';
 import { getCookie } from '../util/util';
 import { useAppDispatch } from '../store/configureStore';
 import { setBasket } from '../../features/basket/basketSlice';
+import { fetchCurrentUser } from '../../features/account/accountSlice';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const buyerId = getCookie('buyerId');
-
+    dispatch(fetchCurrentUser());
     if (buyerId) {
       agent.Basket.get()
         .then((basketData) => dispatch(setBasket(basketData)))
