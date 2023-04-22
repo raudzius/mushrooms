@@ -17,8 +17,12 @@ const Login: React.FC = () => {
   });
 
   const submitForm = async (data: FieldValues) => {
-    await dispatch(signInUser(data));
-    navigate('/catalog');
+    try {
+      await dispatch(signInUser(data));
+      navigate('/catalog');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

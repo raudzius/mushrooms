@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 import { signOut } from '../../features/account/accountSlice';
+import { clearBasket } from '../../features/basket/basketSlice';
 
 const SignedInMenu: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +31,13 @@ const SignedInMenu: React.FC = () => {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My orders</MenuItem>
-        <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
+        <MenuItem onClick={() => {
+          dispatch(signOut());
+          dispatch(clearBasket());
+        }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </>
   );
