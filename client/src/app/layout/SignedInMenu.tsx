@@ -2,6 +2,7 @@ import {
   Button, Menu, Fade, MenuItem,
 } from '@mui/material';
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/configureStore';
 import { signOut } from '../../features/account/accountSlice';
 import { clearBasket } from '../../features/basket/basketSlice';
@@ -30,7 +31,7 @@ const SignedInMenu: React.FC = () => {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My orders</MenuItem>
+        <MenuItem component={RouterLink} to="/orders">My orders</MenuItem>
         <MenuItem onClick={() => {
           dispatch(signOut());
           dispatch(clearBasket());
