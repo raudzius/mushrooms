@@ -5,9 +5,15 @@ import React from 'react';
 import { currencyFormat } from '../../app/util/util';
 import { useAppSelector } from '../../app/store/configureStore';
 
-const BasketSummary: React.FC = () => {
+type BasketSummaryProps = {
+  subtotal?: number;
+};
+
+const BasketSummary: React.FC<BasketSummaryProps> = ({ subtotal }) => {
   const { basket } = useAppSelector((state) => state.basket);
-  const subtotal = basket?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
+  if (subtotal === undefined) {
+    subtotal = basket?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
+  }
   const deliveryFee = subtotal >= 10000 ? 0 : 500;
 
   return (

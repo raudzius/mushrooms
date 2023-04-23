@@ -34,5 +34,7 @@ module.exports = {
     'react/jsx-props-no-spreading': [0],
     '@typescript-eslint/no-use-before-define': [0],
     '@typescript-eslint/no-shadow': [0],
+    '@typescript-eslint/no-non-null-assertion': [0],
+    '@typescript-eslint/no-non-null-asserted-optional-chain': [0],
   },
 };
