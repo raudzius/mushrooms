@@ -1,13 +1,19 @@
 import {
-  Typography, Grid, TextField, FormControlLabel, Checkbox,
+  Typography, Grid, TextField,
 } from '@mui/material';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { CardCvcElement, CardExpiryElement, CardNumberElement } from '@stripe/react-stripe-js';
+import { StripeElementType } from '@stripe/stripe-js';
 import AppTextInput from '../../app/components/AppTextInput';
 import StripeInput from './StripeInput';
 
-const PaymentForm: React.FC = () => {
+type PaymentFormProps = {
+  cardState: { elementError: { [key in StripeElementType]?: string }; };
+  onCardInputChange: (event: any) => void;
+};
+
+const PaymentForm: React.FC<PaymentFormProps> = ({ cardState, onCardInputChange }) => {
   const { control } = useFormContext();
 
   return (
@@ -21,6 +27,9 @@ const PaymentForm: React.FC = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            onChange={onCardInputChange}
+            error={!!cardState.elementError.cardNumber}
+            helperText={cardState.elementError.cardNumber}
             id="cardNumber"
             label="Card number"
             fullWidth
@@ -37,6 +46,9 @@ const PaymentForm: React.FC = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            onChange={onCardInputChange}
+            error={!!cardState.elementError.cardExpiry}
+            helperText={cardState.elementError.cardExpiry}
             id="expDate"
             label="Expiry date"
             fullWidth
@@ -53,9 +65,11 @@ const PaymentForm: React.FC = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            onChange={onCardInputChange}
+            error={!!cardState.elementError.cardCvc}
+            helperText={cardState.elementError.cardCvc}
             id="cvv"
             label="CVV"
-            helperText="Last three digits on signature strip"
             fullWidth
             autoComplete="cc-csc"
             variant="outlined"
