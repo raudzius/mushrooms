@@ -3,6 +3,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { CardNumberElement } from '@stripe/react-stripe-js';
 import AppTextInput from '../../app/components/AppTextInput';
 
 const PaymentForm = () => {
@@ -19,17 +20,17 @@ const PaymentForm = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
-            // required
             id="cardNumber"
             label="Card number"
             fullWidth
             autoComplete="cc-number"
             variant="standard"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{ inputComponent: CardNumberElement }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
-            // required
             id="expDate"
             label="Expiry date"
             fullWidth
@@ -39,7 +40,6 @@ const PaymentForm = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
-            // required
             id="cvv"
             label="CVV"
             helperText="Last three digits on signature strip"
