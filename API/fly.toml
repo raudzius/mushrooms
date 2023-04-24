@@ -9,6 +9,10 @@ primary_region = "waw"
 [build]
   image = "raudzius/mushrooms:latest"
 
+[env]
+ASPNETCORE_URLS="http://+:8080"
+StripeSettings__PublishableKey="pk_test_51K80mMDaCJKT60BEvA0bvrGH1sfobCf2pFvqxUsP87DXpvSdnHUzrSTfo6JHmsns2XOCXUp1SHbePZNXwbk0kwCf002IGIp4jK"
+
 [http_service]
   internal_port = 8080
   force_https = true
