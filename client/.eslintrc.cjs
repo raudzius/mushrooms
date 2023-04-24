@@ -37,5 +37,6 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': [0],
     '@typescript-eslint/no-non-null-asserted-optional-chain': [0],
     'react/display-name': [0],
+    'no-nested-ternary': [0],
   },
 };
