@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(configuration =>
 });
 builder.Services.AddDbContext<StoreContext>(options =>
 {
-  options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+  options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
 builder.Services.AddIdentityCore<User>(options =>
