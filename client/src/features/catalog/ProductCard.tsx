@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Typography variant="body2" color="text.secondary">{product.type}</Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={status.includes(`pendingAddItem${product.id}`)} size="small" onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))}>Add to cart</LoadingButton>
+        <LoadingButton loading={status === `pendingAddItem${product.id}`} size="small" onClick={() => dispatch(addBasketItemAsync({ productId: product.id }))}>Add to cart</LoadingButton>
         <Button component={RouterLink} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
